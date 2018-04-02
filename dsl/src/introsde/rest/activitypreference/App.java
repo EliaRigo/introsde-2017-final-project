@@ -43,7 +43,7 @@ public class App
         	port = String.valueOf(System.getenv("PORT"));
         }
 
-        URI baseUrl = new URI(protocol + hostname + ":" + port + "/introsde/");
+        URI baseUrl = new URI(protocol + hostname + ":" + port + "/introsde-dsl/");
 
         JdkHttpServerFactory.createHttpServer(baseUrl, createApp());
         System.out.println("server starts on " + baseUrl + "\n [kill the process to exit]");
@@ -191,7 +191,7 @@ public class App
     }*/
 
     public static ResourceConfig createApp() {
-    	System.out.println("Starting introsde REST services...");
+    	System.out.println("Starting introsde-dsl REST services...");
         return new MyApplicationConfig();
     }
     
