@@ -60,4 +60,68 @@ public class DomainResource {
 		System.out.println("GET /domain");
 		return Domain.getAll();
 	}
+	
+	/**
+	 * GET /domain/{id} Return Domain (via XML or JSON)
+	 * 
+	 * @param id Id of the Domain (from path /domain/{id})
+	 * @return Domain domain (in XML or JSON format)
+	 */
+	@GET
+	@Path("{id}")
+	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+	public Response getDomainByIdDomain(@PathParam("id") int id) {
+		System.out.println("GET /domain/" + String.valueOf(id));
+		Domain domain = Domain.getDomainById(id);
+		if (domain == null) {
+			// Return 404 if the domain is not present in the database
+			return Response.status(404).build();
+		}
+		return Response.ok().entity(domain).build();
+	}
+	
+	/**
+	 * POST /domain Insert new Domain (via XML or JSON)
+	 * 
+	 * @return New Domain (in XML or JSON format)
+	 */
+	@POST
+	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+	@Consumes({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+	public Domain postDomain(Domain domain) {
+		System.out.println("POST /domain");
+		Domain.postDomain(domain);
+		return domain;
+	}
+	
+	/**
+	 * PUT /domain Update Domain (via XML or JSON)
+	 * 
+	 */
+	@PUT
+	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+	@Consumes({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+	public Domain updateDomain(Domain domain) {
+		System.out.println("POST /domain");
+		Domain.updateDomain(domain);
+		return domain;
+	}
+	
+	/**
+	 * DELETE /domain/{id} Delete Domain with specific {id}
+	 * 
+	 * @param id Id of the Domain (from path /domain/{id})
+	 */
+	@DELETE
+	@Path("{id}")
+	public void deleteDomain(@PathParam("id") int id) {
+		System.out.println("DELETE /domain/" + String.valueOf(id));
+		Domain d = Domain.getDomainById(id);
+		if (d == null) {
+			// Raise internal exception if the person is not present in the database
+			throw new RuntimeException("Delete: Domain with " + id + " not found");
+		}
+		Domain.removeDomain(d);
+	}
+	
 }

@@ -65,4 +65,63 @@ public class Domain implements Serializable {
 		ActivityPreferenceDao.instance.closeConnections(em);
 		return list;
 	}
+	
+	/**
+	 * Get single Domain by IdDomain
+	 * @param id Integer IdDomain
+	 * @return Single Domain
+	 */
+	public static Domain getDomainById(int id) {
+		EntityManager em = ActivityPreferenceDao.instance.createEntityManager();
+		Domain d = em.find(Domain.class, id);
+		ActivityPreferenceDao.instance.closeConnections(em);
+		return d;
+	}
+	
+	/**
+	 * Post new Domain
+	 * 
+	 * @param domain
+	 *            Activity new Activity
+	 * @return Single Domain
+	 */
+	public static Domain postDomain(Domain domain) {
+		EntityManager em = ActivityPreferenceDao.instance.createEntityManager();
+		EntityTransaction tx = em.getTransaction();
+		tx.begin();
+		em.persist(domain);
+		tx.commit();
+		ActivityPreferenceDao.instance.closeConnections(em);
+		return domain;
+	}
+
+	/**
+	 * Update Domain
+	 * 
+	 * @param activity
+	 *            Activity updated Activity
+	 */
+	public static void updateDomain(Domain domain) {
+		EntityManager em = ActivityPreferenceDao.instance.createEntityManager();
+		EntityTransaction tx = em.getTransaction();
+		tx.begin();
+		em.merge(domain);
+		tx.commit();
+		ActivityPreferenceDao.instance.closeConnections(em);
+	}
+	
+	/**
+	 * Remove Domain
+	 * 
+	 * @param d Domain to be deleted
+	 */
+	public static void removeDomain(Domain d) {
+		EntityManager em = ActivityPreferenceDao.instance.createEntityManager();
+		EntityTransaction tx = em.getTransaction();
+		tx.begin();
+		d = em.merge(d);
+		em.remove(d);
+		tx.commit();
+		ActivityPreferenceDao.instance.closeConnections(em);
+	}
 }
