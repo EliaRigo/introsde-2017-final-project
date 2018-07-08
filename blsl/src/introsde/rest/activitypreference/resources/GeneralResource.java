@@ -37,6 +37,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import introsde.rest.activitypreference.model.Activity;
+import introsde.rest.activitypreference.model.Domain;
 import introsde.rest.activitypreference.model.Item;
 import introsde.rest.activitypreference.model.Person;
 
@@ -79,9 +80,39 @@ public class GeneralResource {
 	}
 	
 	@GET
+	@Path("domain")
+	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+	public List<Domain> getListDomain() throws IOException {
+		System.out.println("GET /domain");
+		
+		Response resp;
+		ObjectMapper mapper = new ObjectMapper();
+		ClientConfig clientConfig = new ClientConfig();
+		Client client = ClientBuilder.newClient(clientConfig);
+		WebTarget service = client.target(getBaseURI());
+		
+		String request = "/domain";
+		String type = MediaType.APPLICATION_JSON;
+
+		resp = service.path(request).request().accept(type).get();
+
+		String json = resp.readEntity(String.class);
+		JsonNode nodes = mapper.readTree(json);
+		
+		ArrayList<Domain> arrayItem = new ArrayList<>();
+		
+		for (int i=0; i < nodes.size(); i++) {
+			Domain d = mapper.readValue(nodes.get(i).toString(), Domain.class);
+			arrayItem.add(d);
+		}
+		return arrayItem;
+		//return mapper.readValue(json, arrayItem.getClass());
+	}
+	
+	@GET
 	@Path("activity")
 	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-	public Activity getActivity() throws IOException {
+	public List<Activity> getListActivity() throws IOException {
 		System.out.println("GET /activity");
 		
 		Response resp;
@@ -98,18 +129,21 @@ public class GeneralResource {
 		String json = resp.readEntity(String.class);
 		JsonNode nodes = mapper.readTree(json);
 		
+		ArrayList<Activity> arrayItem = new ArrayList<>();
+		
 		for (int i=0; i < nodes.size(); i++) {
 			Activity a = mapper.readValue(nodes.get(i).toString(), Activity.class);
-			return a;
+			arrayItem.add(a);
 		}
-		return null;
+		return arrayItem;
+		//return mapper.readValue(json, arrayItem.getClass());
 	}
 	
 	@GET
 	@Path("item")
 	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 	public List<Item> getListItem() throws IOException {
-		System.out.println("GET /activity");
+		System.out.println("GET /item");
 		
 		Response resp;
 		ObjectMapper mapper = new ObjectMapper();
