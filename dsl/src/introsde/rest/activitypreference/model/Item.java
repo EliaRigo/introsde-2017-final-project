@@ -126,4 +126,63 @@ public class Item implements Serializable {
 		ActivityPreferenceDao.instance.closeConnections(em);
 		return list;
 	}
+	
+	/**
+	 * Get single Item by IdItem
+	 * @param id Integer IdItem
+	 * @return Single Item
+	 */
+	public static Item getItemById(int id) {
+		EntityManager em = ActivityPreferenceDao.instance.createEntityManager();
+		Item d = em.find(Item.class, id);
+		ActivityPreferenceDao.instance.closeConnections(em);
+		return d;
+	}
+	
+	/**
+	 * Post new Item
+	 * 
+	 * @param item
+	 *            Item new Item
+	 * @return Single Item
+	 */
+	public static Item postItem(Item item) {
+		EntityManager em = ActivityPreferenceDao.instance.createEntityManager();
+		EntityTransaction tx = em.getTransaction();
+		tx.begin();
+		em.persist(item);
+		tx.commit();
+		ActivityPreferenceDao.instance.closeConnections(em);
+		return item;
+	}
+
+	/**
+	 * Update Item
+	 * 
+	 * @param item
+	 *            Item updated Item
+	 */
+	public static void updateItem(Item item) {
+		EntityManager em = ActivityPreferenceDao.instance.createEntityManager();
+		EntityTransaction tx = em.getTransaction();
+		tx.begin();
+		em.merge(item);
+		tx.commit();
+		ActivityPreferenceDao.instance.closeConnections(em);
+	}
+	
+	/**
+	 * Remove Item
+	 * 
+	 * @param d Item to be deleted
+	 */
+	public static void removeItem(Item d) {
+		EntityManager em = ActivityPreferenceDao.instance.createEntityManager();
+		EntityTransaction tx = em.getTransaction();
+		tx.begin();
+		d = em.merge(d);
+		em.remove(d);
+		tx.commit();
+		ActivityPreferenceDao.instance.closeConnections(em);
+	}
 }
