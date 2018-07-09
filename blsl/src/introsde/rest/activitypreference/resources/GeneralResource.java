@@ -22,6 +22,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
+import javax.ws.rs.client.Entity;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
@@ -78,6 +79,12 @@ public class GeneralResource {
 		System.out.println("GET /");
 		return "BLSL OK";
 	}
+	
+	/**
+	 * 
+	 * GET
+	 * 
+	 */
 	
 	@GET
 	@Path("domain")
@@ -167,6 +174,96 @@ public class GeneralResource {
 		}
 		return arrayItem;
 		//return mapper.readValue(json, arrayItem.getClass());
+	}
+	
+	/**
+	 * 
+	 * POST
+	 * 
+	 */
+	
+	@POST
+	@Path("activity")
+	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+	@Consumes({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+	public String postActivity(String a) throws JsonParseException, JsonMappingException, IOException {
+		System.out.println("POST /activity");
+		
+		Response resp;
+		ObjectMapper mapper = new ObjectMapper();
+		ClientConfig clientConfig = new ClientConfig();
+		Client client = ClientBuilder.newClient(clientConfig);
+		WebTarget service = client.target(getBaseURI());
+		
+		String request = "/activity";
+		String type = MediaType.APPLICATION_JSON;
+		String content = MediaType.APPLICATION_JSON;
+
+		resp = service.path(request).request().accept(type).post(Entity.entity(a, content));
+		return resp.readEntity(String.class);
+	}
+	
+	@POST
+	@Path("person")
+	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+	@Consumes({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+	public String postPerson(String p) throws JsonParseException, JsonMappingException, IOException {
+		System.out.println("POST /person");
+		
+		Response resp;
+		ObjectMapper mapper = new ObjectMapper();
+		ClientConfig clientConfig = new ClientConfig();
+		Client client = ClientBuilder.newClient(clientConfig);
+		WebTarget service = client.target(getBaseURI());
+		
+		String request = "/person";
+		String type = MediaType.APPLICATION_JSON;
+		String content = MediaType.APPLICATION_JSON;
+
+		resp = service.path(request).request().accept(type).post(Entity.entity(p, content));
+		return resp.readEntity(String.class);
+	}
+	
+	@POST
+	@Path("item")
+	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+	@Consumes({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+	public String postItem(String i) throws JsonParseException, JsonMappingException, IOException {
+		System.out.println("POST /item");
+		
+		Response resp;
+		ObjectMapper mapper = new ObjectMapper();
+		ClientConfig clientConfig = new ClientConfig();
+		Client client = ClientBuilder.newClient(clientConfig);
+		WebTarget service = client.target(getBaseURI());
+		
+		String request = "/item";
+		String type = MediaType.APPLICATION_JSON;
+		String content = MediaType.APPLICATION_JSON;
+
+		resp = service.path(request).request().accept(type).post(Entity.entity(i, content));
+		return resp.readEntity(String.class);
+	}
+	
+	@POST
+	@Path("domain")
+	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+	@Consumes({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+	public String postDomain(String d) throws JsonParseException, JsonMappingException, IOException {
+		System.out.println("POST /domain");
+		
+		Response resp;
+		ObjectMapper mapper = new ObjectMapper();
+		ClientConfig clientConfig = new ClientConfig();
+		Client client = ClientBuilder.newClient(clientConfig);
+		WebTarget service = client.target(getBaseURI());
+		
+		String request = "/domain";
+		String type = MediaType.APPLICATION_JSON;
+		String content = MediaType.APPLICATION_JSON;
+
+		resp = service.path(request).request().accept(type).post(Entity.entity(d, content));
+		return resp.readEntity(String.class);
 	}
 	
 	@POST
