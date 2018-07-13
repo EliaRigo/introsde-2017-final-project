@@ -63,7 +63,7 @@ public class GeneralResource {
 	private EntityManagerFactory entityManagerFactory;
 	
 	private static URI getBaseURI() {
-		return UriBuilder.fromUri("http://127.0.1.1:5900/introsde-dsl").build();
+		return UriBuilder.fromUri("http://127.0.1.1:5901/introsde-blsl").build();
 		//return
 		//UriBuilder.fromUri("https://introsde2017-assign-2-server.herokuapp.com/assignment/").build();
 	}
