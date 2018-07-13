@@ -63,7 +63,7 @@ public class GeneralResource {
 	private EntityManagerFactory entityManagerFactory;
 	
 	private static URI getBaseURI() {
-		return UriBuilder.fromUri("http://127.0.1.1:5901/introsde-blsl").build();
+		return UriBuilder.fromUri("http://127.0.1.1:5900/introsde-dsl").build();
 		//return
 		//UriBuilder.fromUri("https://introsde2017-assign-2-server.herokuapp.com/assignment/").build();
 	}
@@ -174,6 +174,25 @@ public class GeneralResource {
 		}
 		return arrayItem;
 		//return mapper.readValue(json, arrayItem.getClass());
+	}
+	
+	@GET
+	@Path("item/{id}")
+	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+	public Item getItemById(@PathParam("id") int id) throws IOException {
+		System.out.println(String.format("GET item/%d", id));
+		
+		Response resp;
+		ObjectMapper mapper = new ObjectMapper();
+		ClientConfig clientConfig = new ClientConfig();
+		Client client = ClientBuilder.newClient(clientConfig);
+		WebTarget service = client.target(getBaseURI());
+		
+		String request = String.format("/item/%d", id);
+		String type = MediaType.APPLICATION_JSON;
+
+		resp = service.path(request).request().accept(type).get();
+		return resp.readEntity(Item.class);
 	}
 	
 	/**

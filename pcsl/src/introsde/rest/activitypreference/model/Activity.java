@@ -50,6 +50,8 @@ public class Activity implements Serializable {
 
 	@Column(name = "\"evaluation\"")
 	private int evaluation;
+	
+	private Item infoItem;
 
 	public Activity() {
 
@@ -95,6 +97,14 @@ public class Activity implements Serializable {
 
 	public void setEvaluation(int evaluation) {
 		this.evaluation = evaluation;
+	}
+	
+	public Item getInfoItem() {
+		return infoItem;
+	}
+
+	public void setInfoItem(Item infoItem) {
+		this.infoItem = infoItem;
 	}
 
 	/* Follow class methods */

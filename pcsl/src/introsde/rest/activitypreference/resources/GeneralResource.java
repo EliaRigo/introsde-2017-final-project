@@ -63,7 +63,7 @@ public class GeneralResource {
 	private EntityManagerFactory entityManagerFactory;
 	
 	private static URI getBaseURI() {
-		return UriBuilder.fromUri("http://127.0.1.1:5902/introsde-pcsl").build();
+		return UriBuilder.fromUri("http://127.0.1.1:5901/introsde-blsl").build();
 		//return
 		//UriBuilder.fromUri("https://introsde2017-assign-2-server.herokuapp.com/assignment/").build();
 	}
@@ -77,7 +77,7 @@ public class GeneralResource {
 	//@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 	public String getBlslUp() {
 		System.out.println("GET /");
-		return "BLSL OK";
+		return "PCSL OK";
 	}
 	
 	/**
@@ -98,7 +98,7 @@ public class GeneralResource {
 		Client client = ClientBuilder.newClient(clientConfig);
 		WebTarget service = client.target(getBaseURI());
 		
-		String request = "/domain";
+		String request = "/general/domain";
 		String type = MediaType.APPLICATION_JSON;
 
 		resp = service.path(request).request().accept(type).get();
@@ -117,18 +117,18 @@ public class GeneralResource {
 	}
 	
 	@GET
-	@Path("activity")
+	@Path("person/{id}/activity")
 	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-	public List<Activity> getListActivity() throws IOException {
-		System.out.println("GET /activity");
+	public List<Activity> getListActivityByPersonId(@PathParam("id") int id) throws IOException {
+		System.out.println(String.format("GET person/%d/activity", id));
 		
-		Response resp;
+		Response resp, itemResp;
 		ObjectMapper mapper = new ObjectMapper();
 		ClientConfig clientConfig = new ClientConfig();
 		Client client = ClientBuilder.newClient(clientConfig);
 		WebTarget service = client.target(getBaseURI());
 		
-		String request = "/activity";
+		String request = "general/activity";
 		String type = MediaType.APPLICATION_JSON;
 
 		resp = service.path(request).request().accept(type).get();
@@ -140,7 +140,13 @@ public class GeneralResource {
 		
 		for (int i=0; i < nodes.size(); i++) {
 			Activity a = mapper.readValue(nodes.get(i).toString(), Activity.class);
-			arrayItem.add(a);
+			if (a.getIdPerson() == id) {
+				String itemRequest =String.format("general/item/%d", a.getIdItem());
+				itemResp = service.path(itemRequest).request().accept(type).get();
+				Item item = itemResp.readEntity(Item.class);
+				a.setInfoItem(item);
+				arrayItem.add(a);
+			}
 		}
 		return arrayItem;
 		//return mapper.readValue(json, arrayItem.getClass());
