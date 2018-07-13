@@ -205,7 +205,7 @@ public class GeneralResource {
 	@Path("activity")
 	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 	@Consumes({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-	public String postActivity(String a) throws JsonParseException, JsonMappingException, IOException {
+	public Activity postActivity(Activity a) throws JsonParseException, JsonMappingException, IOException {
 		System.out.println("POST /activity");
 		
 		Response resp;
@@ -219,14 +219,14 @@ public class GeneralResource {
 		String content = MediaType.APPLICATION_JSON;
 
 		resp = service.path(request).request().accept(type).post(Entity.entity(a, content));
-		return resp.readEntity(String.class);
+		return resp.readEntity(Activity.class);
 	}
 	
 	@POST
 	@Path("person")
 	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 	@Consumes({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-	public String postPerson(String p) throws JsonParseException, JsonMappingException, IOException {
+	public Person postPerson(Person p) throws JsonParseException, JsonMappingException, IOException {
 		System.out.println("POST /person");
 		
 		Response resp;
@@ -240,14 +240,14 @@ public class GeneralResource {
 		String content = MediaType.APPLICATION_JSON;
 
 		resp = service.path(request).request().accept(type).post(Entity.entity(p, content));
-		return resp.readEntity(String.class);
+		return resp.readEntity(Person.class);
 	}
 	
 	@POST
 	@Path("item")
 	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 	@Consumes({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-	public String postItem(String i) throws JsonParseException, JsonMappingException, IOException {
+	public Item postItem(Item i) throws JsonParseException, JsonMappingException, IOException {
 		System.out.println("POST /item");
 		
 		Response resp;
@@ -261,14 +261,14 @@ public class GeneralResource {
 		String content = MediaType.APPLICATION_JSON;
 
 		resp = service.path(request).request().accept(type).post(Entity.entity(i, content));
-		return resp.readEntity(String.class);
+		return resp.readEntity(Item.class);
 	}
 	
 	@POST
 	@Path("domain")
 	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 	@Consumes({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-	public String postDomain(String d) throws JsonParseException, JsonMappingException, IOException {
+	public Domain postDomain(Domain d) throws JsonParseException, JsonMappingException, IOException {
 		System.out.println("POST /domain");
 		
 		Response resp;
@@ -282,7 +282,7 @@ public class GeneralResource {
 		String content = MediaType.APPLICATION_JSON;
 
 		resp = service.path(request).request().accept(type).post(Entity.entity(d, content));
-		return resp.readEntity(String.class);
+		return resp.readEntity(Domain.class);
 	}
 	
 	@POST

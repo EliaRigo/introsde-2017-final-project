@@ -233,7 +233,7 @@ public class GeneralResource {
 		Client client = ClientBuilder.newClient(clientConfig);
 		WebTarget service = client.target(getBaseURI());
 		
-		String request = "/activity";
+		String request = "/general/activity";
 		String type = MediaType.APPLICATION_JSON;
 		String content = MediaType.APPLICATION_JSON;
 
@@ -254,7 +254,7 @@ public class GeneralResource {
 		Client client = ClientBuilder.newClient(clientConfig);
 		WebTarget service = client.target(getBaseURI());
 		
-		String request = "/person";
+		String request = "/general/person";
 		String type = MediaType.APPLICATION_JSON;
 		String content = MediaType.APPLICATION_JSON;
 
@@ -275,7 +275,7 @@ public class GeneralResource {
 		Client client = ClientBuilder.newClient(clientConfig);
 		WebTarget service = client.target(getBaseURI());
 		
-		String request = "/item";
+		String request = "/general/item";
 		String type = MediaType.APPLICATION_JSON;
 		String content = MediaType.APPLICATION_JSON;
 
@@ -296,7 +296,7 @@ public class GeneralResource {
 		Client client = ClientBuilder.newClient(clientConfig);
 		WebTarget service = client.target(getBaseURI());
 		
-		String request = "/domain";
+		String request = "/general/domain";
 		String type = MediaType.APPLICATION_JSON;
 		String content = MediaType.APPLICATION_JSON;
 
@@ -317,24 +317,12 @@ public class GeneralResource {
 		Client client = ClientBuilder.newClient(clientConfig);
 		WebTarget service = client.target(getBaseURI());
 		
-		String request = "/person";
+		String request = "/general/login";
 		String type = MediaType.APPLICATION_JSON;
+		String content = MediaType.APPLICATION_JSON;
 
-		resp = service.path(request).request().accept(type).get();
+		resp = service.path(request).request().accept(type).post(Entity.entity(p, content));
 
-		String json = resp.readEntity(String.class);
-		JsonNode nodes = mapper.readTree(json);
-		
-		for (int i=0; i < nodes.size(); i++) {
-			Person a = mapper.readValue(nodes.get(i).toString(), Person.class);
-			//System.out.println(a.getUsername() + " - " + p.getUsername());
-			//System.out.println(a.getPassword() + " - " + p.getPassword());
-			if (a.getUsername().equals(p.getUsername()) && 
-				a.getPassword().equals(p.getPassword())) {
-				//System.out.println("Found!");
-				return a;
-			}
-		}
-		return null;
+		return resp.readEntity(Person.class);
 	}
 }
