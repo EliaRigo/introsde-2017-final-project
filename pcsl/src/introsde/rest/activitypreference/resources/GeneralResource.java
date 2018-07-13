@@ -117,6 +117,38 @@ public class GeneralResource {
 	}
 	
 	@GET
+	@Path("domain/{id}/item")
+	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+	public List<Item> getListItemByDomainId(@PathParam("id") int id) throws IOException {
+		System.out.println(String.format("GET domain/%d/item", id));
+		
+		Response resp;
+		ObjectMapper mapper = new ObjectMapper();
+		ClientConfig clientConfig = new ClientConfig();
+		Client client = ClientBuilder.newClient(clientConfig);
+		WebTarget service = client.target(getBaseURI());
+		
+		String request = "/general/item";
+		String type = MediaType.APPLICATION_JSON;
+
+		resp = service.path(request).request().accept(type).get();
+
+		String json = resp.readEntity(String.class);
+		JsonNode nodes = mapper.readTree(json);
+		
+		ArrayList<Item> arrayItem = new ArrayList<>();
+		
+		for (int i=0; i < nodes.size(); i++) {
+			Item a = mapper.readValue(nodes.get(i).toString(), Item.class);
+			if (a.getIdDomain() == id) {
+				arrayItem.add(a);
+			}
+		}
+		return arrayItem;
+		//return mapper.readValue(json, arrayItem.getClass());
+	}
+	
+	@GET
 	@Path("person/{id}/activity")
 	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 	public List<Activity> getListActivityByPersonId(@PathParam("id") int id) throws IOException {
@@ -164,7 +196,7 @@ public class GeneralResource {
 		Client client = ClientBuilder.newClient(clientConfig);
 		WebTarget service = client.target(getBaseURI());
 		
-		String request = "/item";
+		String request = "/general/item";
 		String type = MediaType.APPLICATION_JSON;
 
 		resp = service.path(request).request().accept(type).get();
