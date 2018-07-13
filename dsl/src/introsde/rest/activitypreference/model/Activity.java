@@ -112,6 +112,18 @@ public class Activity implements Serializable {
 	}
 
 	/**
+	 * Get single Activity by IdActivity
+	 * @param id Integer IdActivity
+	 * @return Single Activity
+	 */
+	public static Activity getActivityById(int id) {
+		EntityManager em = ActivityPreferenceDao.instance.createEntityManager();
+		Activity a = em.find(Activity.class, id);
+		ActivityPreferenceDao.instance.closeConnections(em);
+		return a;
+	}
+	
+	/**
 	 * Post new Activity
 	 * 
 	 * @param activity

@@ -72,4 +72,42 @@ public class ActivityResource {
 		Activity.postActivity(activity);
 		return activity;
 	}
+	
+	/**
+	 * 
+	 */
+	@PUT
+	@Path("{id}")
+	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+	@Consumes({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+	public Activity putActivity(@PathParam("id") int id, Activity activity) {
+		System.out.println("PUT /activity/" + String.valueOf(id));
+		Activity existing = Activity.getActivityById(id);
+		if (existing != null && id == activity.getIdItem()) {
+			// We allow updating only if the activity exits
+			// and request's id and activity.getId() match
+			
+			if (activity.getIdPerson() == -1) {
+				// Update idPerson
+				activity.setIdPerson(existing.getIdPerson());
+			}
+			
+			if (activity.getIdItem() == -1) {
+				// Update idItem
+				activity.setIdItem(existing.getIdItem());
+			}
+			
+			if (activity.getDate() == null) {
+				// Update date
+				activity.setDate(existing.getDate());
+			}
+			
+			if (activity.getEvaluation() == -1) {
+				// Update date
+				activity.setEvaluation(existing.getEvaluation());
+			}
+			Activity.updateActivity(activity);
+		}
+		return activity;
+	}
 }

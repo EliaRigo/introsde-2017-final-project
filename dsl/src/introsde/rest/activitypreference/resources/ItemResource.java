@@ -101,11 +101,46 @@ public class ItemResource {
 	 * 
 	 */
 	@PUT
+	@Path("{id}")
 	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
 	@Consumes({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-	public Item updateItem(Item item) {
-		System.out.println("POST /item");
-		Item.updateItem(item);
+	public Item updateItem(@PathParam("id") int id, Item item) {
+		System.out.println("PUT /item/" + String.valueOf(id));
+		Item existing = Item.getItemById(id);
+		if (existing != null && id == item.getIdItem()) {
+			// We allow updating only if the item exits
+			// and request's id and item.getId() match
+			if (item.getName() == null) {
+				// Update name
+				item.setName(existing.getName());
+			}
+			
+			if (item.getDescription() == null) {
+				// Update description
+				item.setDescription(existing.getDescription());
+			}
+			
+			if (item.getDate() == null) {
+				// Update date
+				item.setDate(existing.getDate());
+			}
+			
+			if (item.getHourStart() == null) {
+				// Update hourStart
+				item.setHourStart(existing.getHourStart());
+			}
+			
+			if (item.getHourEnd() == null) {
+				// Update hourEnd
+				item.setHourEnd(existing.getHourEnd());
+			}
+			
+			if (item.getIdDomain() == -1) {
+				// Update idDomain
+				item.setIdDomain(existing.getIdDomain());
+			}
+			Item.updateItem(item);
+		}
 		return item;
 	}
 	
