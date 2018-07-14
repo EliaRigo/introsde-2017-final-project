@@ -324,5 +324,138 @@ public class GeneralResource {
 	 * PUT
 	 * 
 	 */
+	@PUT
+	@Path("activity/{id}")
+	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+	@Consumes({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+	public Activity putActivity(@PathParam("id") int id, Activity a) {
+		System.out.println(String.format("PUT /activity/%d", id));
+		
+		Response resp;
+		ObjectMapper mapper = new ObjectMapper();
+		ClientConfig clientConfig = new ClientConfig();
+		Client client = ClientBuilder.newClient(clientConfig);
+		WebTarget service = client.target(getBaseURI());
+		
+		String request = String.format("/activity/%d", id);
+		String type = MediaType.APPLICATION_JSON;
+		String content = MediaType.APPLICATION_JSON;
+
+		resp = service.path(request).request().accept(type).put(Entity.entity(a, content));
+		return resp.readEntity(Activity.class);
+	}
 	
+	@PUT
+	@Path("domain/{id}")
+	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+	@Consumes({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+	public Domain putDomain(@PathParam("id") int id, Domain a) {
+		System.out.println(String.format("PUT /domain/%d", id));
+		
+		Response resp;
+		ObjectMapper mapper = new ObjectMapper();
+		ClientConfig clientConfig = new ClientConfig();
+		Client client = ClientBuilder.newClient(clientConfig);
+		WebTarget service = client.target(getBaseURI());
+		
+		String request = String.format("/domain/%d", id);
+		String type = MediaType.APPLICATION_JSON;
+		String content = MediaType.APPLICATION_JSON;
+		
+		resp = service.path(request).request().accept(type).put(Entity.entity(a, content));
+		return resp.readEntity(Domain.class);
+	}
+	
+	@PUT
+	@Path("item/{id}")
+	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+	@Consumes({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+	public Item putItem(@PathParam("id") int id, Item a) {
+		System.out.println(String.format("PUT /item/%d", id));
+		
+		Response resp;
+		ObjectMapper mapper = new ObjectMapper();
+		ClientConfig clientConfig = new ClientConfig();
+		Client client = ClientBuilder.newClient(clientConfig);
+		WebTarget service = client.target(getBaseURI());
+		
+		String request = String.format("/item/%d", id);
+		String type = MediaType.APPLICATION_JSON;
+		String content = MediaType.APPLICATION_JSON;
+		
+		resp = service.path(request).request().accept(type).put(Entity.entity(a, content));
+		return resp.readEntity(Item.class);
+	}
+	
+	/**
+	 * 
+	 * DELETE
+	 * 
+	 */
+	
+	@DELETE
+	@Path("activity/{id}")
+	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+	@Consumes({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+	public void deleteActivity(@PathParam("id") int id) {
+		/*
+		 * Remember Activity as infoItem
+		 */
+		System.out.println(String.format("PUT /activity/%d", id));
+		
+		Response resp;
+		ObjectMapper mapper = new ObjectMapper();
+		ClientConfig clientConfig = new ClientConfig();
+		Client client = ClientBuilder.newClient(clientConfig);
+		WebTarget service = client.target(getBaseURI());
+		
+		String request = String.format("/activity/%d", id);
+		String type = MediaType.APPLICATION_JSON;
+		String content = MediaType.APPLICATION_JSON;
+		
+		resp = service.path(request).request().accept(type).delete();
+		//return resp.readEntity(Activity.class);
+	}
+	
+	@DELETE
+	@Path("domain/{id}")
+	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+	@Consumes({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+	public void deleteDomain(@PathParam("id") int id) {
+		System.out.println(String.format("PUT /domain/%d", id));
+		
+		Response resp;
+		ObjectMapper mapper = new ObjectMapper();
+		ClientConfig clientConfig = new ClientConfig();
+		Client client = ClientBuilder.newClient(clientConfig);
+		WebTarget service = client.target(getBaseURI());
+		
+		String request = String.format("/domain/%d", id);
+		String type = MediaType.APPLICATION_JSON;
+		String content = MediaType.APPLICATION_JSON;
+		
+		resp = service.path(request).request().accept(type).delete();
+		//return resp.readEntity(Domain.class);
+	}
+	
+	@DELETE
+	@Path("item/{id}")
+	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+	@Consumes({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+	public void deleteItem(@PathParam("id") int id, Item a) {
+		System.out.println(String.format("PUT /item/%d", id));
+		
+		Response resp;
+		ObjectMapper mapper = new ObjectMapper();
+		ClientConfig clientConfig = new ClientConfig();
+		Client client = ClientBuilder.newClient(clientConfig);
+		WebTarget service = client.target(getBaseURI());
+		
+		String request = String.format("/item/%d", id);
+		String type = MediaType.APPLICATION_JSON;
+		String content = MediaType.APPLICATION_JSON;
+		
+		resp = service.path(request).request().accept(type).delete();
+		//return resp.readEntity(Item.class);
+	}
 }

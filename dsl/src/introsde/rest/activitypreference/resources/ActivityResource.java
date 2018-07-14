@@ -110,4 +110,21 @@ public class ActivityResource {
 		}
 		return activity;
 	}
+	
+	/**
+	 * DELETE /activity/{id} Delete Activity with specific {id}
+	 * 
+	 * @param id Id of the Activity (from path /activity/{id})
+	 */
+	@DELETE
+	@Path("{id}")
+	public void deleteActivity(@PathParam("id") int id) {
+		System.out.println("DELETE /activity/" + String.valueOf(id));
+		Activity a = Activity.getActivityById(id);
+		if (a == null) {
+			// Raise internal exception if the person is not present in the database
+			throw new RuntimeException("Delete: Activity with " + id + " not found");
+		}
+		Activity.removeActivity(a);
+	}
 }

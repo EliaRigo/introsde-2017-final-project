@@ -99,11 +99,22 @@ public class DomainResource {
 	 * 
 	 */
 	@PUT
+	@Path("{id}")
 	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
 	@Consumes({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-	public Domain updateDomain(Domain domain) {
+	public Domain updateDomain(@PathParam("id") int id, Domain domain) {
 		System.out.println("POST /domain");
-		Domain.updateDomain(domain);
+		Domain existing = Domain.getDomainById(id);
+		if (existing != null && id == domain.getIdDomain()) {
+			// We allow updating only if the activity exits
+			// and request's id and activity.getId() match
+						
+			if (domain.getName() == null) {
+				// Update idPerson
+				domain.setName(existing.getName());
+			}
+			Domain.updateDomain(domain);
+		}
 		return domain;
 	}
 	

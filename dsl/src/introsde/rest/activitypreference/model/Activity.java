@@ -158,4 +158,19 @@ public class Activity implements Serializable {
 		tx.commit();
 		ActivityPreferenceDao.instance.closeConnections(em);
 	}
+	
+	/**
+	 * Remove Item
+	 * 
+	 * @param d Item to be deleted
+	 */
+	public static void removeActivity(Activity a) {
+		EntityManager em = ActivityPreferenceDao.instance.createEntityManager();
+		EntityTransaction tx = em.getTransaction();
+		tx.begin();
+		a = em.merge(a);
+		em.remove(a);
+		tx.commit();
+		ActivityPreferenceDao.instance.closeConnections(em);
+	}
 }
