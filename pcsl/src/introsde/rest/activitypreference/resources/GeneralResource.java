@@ -351,7 +351,7 @@ public class GeneralResource {
 		String type = MediaType.APPLICATION_JSON;
 		String content = MediaType.APPLICATION_JSON;
 		
-		resp = service.path(request).request().accept(type).put(Entity.entity(a.toString(), content));
+		resp = service.path(request).request().accept(type).put(Entity.entity(a, content));
 		return resp.readEntity(Activity.class);
 	}
 	

@@ -83,7 +83,7 @@ public class ActivityResource {
 	public Activity putActivity(@PathParam("id") int id, Activity activity) {
 		System.out.println("PUT /activity/" + String.valueOf(id));
 		Activity existing = Activity.getActivityById(id);
-		if (existing != null && id == activity.getIdItem()) {
+		if (existing != null && id == activity.getIdActivity()) {
 			// We allow updating only if the activity exits
 			// and request's id and activity.getId() match
 			

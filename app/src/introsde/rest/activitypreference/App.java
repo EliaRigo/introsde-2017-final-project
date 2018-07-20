@@ -99,9 +99,11 @@ public class App {
 			break;
 		case 5:
 			deleteMyActivity();
+			operations();
 			break;
 		case 6:
-			//updateMyActivity();
+			updateMyActivity();
+			operations();
 			break;
 		case 7:
 			//getSuggestions();
@@ -223,7 +225,7 @@ public class App {
 		printInfoAndStart();
 	}
 	
-	public static void getMyActivity() throws IOException {
+	public static ArrayList<Activity> getMyActivity() throws IOException {
 		System.out.println();
 		System.out.println("MY ACTIVITY");
 		System.out.println();
@@ -245,6 +247,7 @@ public class App {
 		ArrayList<Activity> arrayItem = new ArrayList<>();
 		for (int i=0; i < nodes.size(); i++) {
 			Activity a = mapper.readValue(nodes.get(i).toString(), Activity.class);
+			arrayItem.add(a);
 			
 			System.out.println("--- Item Information ---");
 			System.out.println(String.format("Item name: %s", a.getInfoItem().getName()));
@@ -258,6 +261,7 @@ public class App {
 			System.out.println(String.format("Activity evaluation: %d", a.getEvaluation()));
 			System.out.println();
 		}
+		return arrayItem;
 	}
 	
 	public static void getAvailableDomain() throws IOException {
@@ -371,7 +375,6 @@ public class App {
 		int s = sc.nextInt();
 		System.out.println();
 		
-		
 		Response resp;
 		ObjectMapper mapper = new ObjectMapper();
 		ClientConfig clientConfig = new ClientConfig();
@@ -383,5 +386,53 @@ public class App {
 		String content = MediaType.APPLICATION_JSON;
 		
 		resp = service.path(request).request().accept(type).delete();
+	}
+	
+	public static void updateMyActivity() throws IOException {
+		System.out.println();
+		System.out.println("UPDATE MY ACTIVITY");
+		ArrayList<Activity> activity = getMyActivity();
+		System.out.println("Id activity to update: ");
+		int id = sc.nextInt();
+		System.out.println();
+		System.out.println("Update date: ");
+		String date = sc.next();
+		System.out.println("Update evaluation: ");
+		int evaluation = sc.nextInt();
+		Activity activityUpdate = new Activity();
+		for(Activity a : activity) {
+			if(a.getIdActivity() == id) {
+				activityUpdate.setIdActivity(id);
+				activityUpdate.setIdPerson(a.getIdPerson());
+				activityUpdate.setIdItem(a.getIdItem());
+				activityUpdate.setDate(date);
+				activityUpdate.setEvaluation(evaluation);
+				break;
+			}
+		}
+		
+		if (activityUpdate != null) {		
+			Response resp;
+			ObjectMapper mapper = new ObjectMapper();
+			ClientConfig clientConfig = new ClientConfig();
+			Client client = ClientBuilder.newClient(clientConfig);
+			WebTarget service = client.target(getBaseURI());
+			
+			String request = String.format("/general/activity/%d", activityUpdate.getIdActivity());
+			String type = MediaType.APPLICATION_JSON;
+			String content = MediaType.APPLICATION_JSON;
+			String body = "{" + 
+					"\"idActivity\":" + activityUpdate.getIdActivity() + ", " + 
+					"\"idPerson\":" + activityUpdate.getIdPerson() + ", " + 
+					"\"idItem\":" + activityUpdate.getIdItem() + ", " + 
+					"\"date\": \"" + activityUpdate.getDate() + "\", " +  
+					"\"evaluation\":" + activityUpdate.getEvaluation() +
+					"}";
+			
+			resp = service.path(request).request().accept(type).put(Entity.entity(body, content));
+		}
+		else {
+			System.out.println("Activity id not valid");
+		}
 	}
 }
