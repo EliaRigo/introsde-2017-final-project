@@ -99,19 +99,4 @@ public class Suggestion implements Serializable {
 		ActivityPreferenceDao.instance.closeConnections(em);
 		return list;
 	}
-	
-	/**
-	 * Post suggestion
-	 * 
-	 * @return Single Suggestion
-	 */
-	public static Suggestion postSuggestion(Suggestion suggestion) {
-		EntityManager em = ActivityPreferenceDao.instance.createEntityManager();
-		EntityTransaction tx = em.getTransaction();
-		tx.begin();
-		em.persist(suggestion);
-		tx.commit();
-		ActivityPreferenceDao.instance.closeConnections(em);
-		return suggestion;
-	}
 }

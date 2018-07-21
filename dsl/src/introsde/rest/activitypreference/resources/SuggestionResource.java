@@ -61,4 +61,18 @@ public class SuggestionResource {
 		System.out.println("GET /suggestion");
 		return Suggestion.getAll();
 	}
+	
+	/**
+	 * POST /suggestion Insert new Suggestion (via XML or JSON)
+	 * 
+	 * @return New Suggestion (in XML or JSON format)
+	 */
+	@POST
+	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+	@Consumes({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+	public Suggestion postSuggestion(Suggestion suggestion) {
+		System.out.println("POST /suggestion");
+		return Suggestion.postSuggestion(suggestion);
+	}
+	
 }

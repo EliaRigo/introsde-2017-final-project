@@ -77,6 +77,18 @@ public class App {
 		System.out.println("5. Delete my activity");
 		System.out.println("6. Update my activity");
 		System.out.println("7. Get suggestions");
+		if (p.getIsAdmin() == 1) {
+			System.out.println();
+			System.out.println("Congratulations! You are an admin!");
+			System.out.println("You can choose also this additional options");
+			System.out.println("10. Add new item");
+			System.out.println("11. Add new domain");
+			System.out.println("12. Update item");
+			System.out.println("13. Update domain");
+			System.out.println("14. Delete item");
+			System.out.println("15. Delete domain");
+			System.out.println();
+		}
 		System.out.println("0. Exit");
 		System.out.println();
 		System.out.print("> ");
