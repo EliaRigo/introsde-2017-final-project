@@ -23,7 +23,7 @@ public interface General {
 	//Method #1
 	@WebMethod(operationName="getMySuggestion")
 	@WebResult(name="suggestion") 
-	public List<Suggestion> getMySuggestion() throws JsonParseException, JsonMappingException, IOException;
+	public List<Suggestion> getMySuggestion(@WebParam(name="personId") int id) throws JsonParseException, JsonMappingException, IOException;
 	
 	//Method #2
 	//Auto Add

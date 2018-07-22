@@ -134,7 +134,7 @@ public class GeneralImpl implements General {
 	 */
 	
 	@Override
-	public List<Suggestion> getMySuggestion() throws JsonParseException, JsonMappingException, IOException {
+	public List<Suggestion> getMySuggestion(int id) throws JsonParseException, JsonMappingException, IOException {
 		System.out.println("GET /suggestion");
 		
 		Response resp;
@@ -155,7 +155,9 @@ public class GeneralImpl implements General {
 		
 		for (int i=0; i < nodes.size(); i++) {
 			Suggestion s = mapper.readValue(nodes.get(i).toString(), Suggestion.class);
-			arraySuggestion.add(s);
+			if (s.getIdPerson() == id) {
+				arraySuggestion.add(s);
+			}
 		}
 		return arraySuggestion;
 		//return mapper.readValue(json, arrayItem.getClass());

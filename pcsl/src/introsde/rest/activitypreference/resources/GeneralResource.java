@@ -41,6 +41,12 @@ import introsde.rest.activitypreference.model.Activity;
 import introsde.rest.activitypreference.model.Domain;
 import introsde.rest.activitypreference.model.Item;
 import introsde.rest.activitypreference.model.Person;
+import introsde.rest.activitypreference.soap.ws.General;
+import introsde.rest.activitypreference.soap.ws.IOException_Exception;
+import introsde.rest.activitypreference.soap.ws.JsonMappingException_Exception;
+import introsde.rest.activitypreference.soap.ws.JsonParseException_Exception;
+import introsde.rest.activitypreference.soap.ws.PeopleService;
+import introsde.rest.activitypreference.soap.ws.Suggestion;
 
 @Stateless // will work only inside a Java EE application
 @LocalBean // will work only inside a Java EE application
@@ -212,6 +218,23 @@ public class GeneralResource {
 		}
 		return arrayItem;
 		//return mapper.readValue(json, arrayItem.getClass());
+	}
+	
+	@GET
+	@Path("person/{id}/suggestion")
+	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+	public List<Suggestion> getListSuggestion(@PathParam("id") int id) throws IOException_Exception, JsonMappingException_Exception, JsonParseException_Exception {
+		PeopleService s = new PeopleService();
+		General g = s.getGeneralImplPort();
+		return g.getMySuggestion(id);
+	}
+	
+	@Path("person/{id}/calculate-suggestion")
+	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+	public Suggestion getCalculateSuggestion(@PathParam("id") int id) throws IOException_Exception, JsonMappingException_Exception, JsonParseException_Exception {
+		PeopleService s = new PeopleService();
+		General g = s.getGeneralImplPort();
+		return g.calculateSuggestion(id);
 	}
 	
 	/**
