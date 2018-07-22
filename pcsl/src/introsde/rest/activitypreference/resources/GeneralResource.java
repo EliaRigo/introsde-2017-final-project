@@ -224,7 +224,7 @@ public class GeneralResource {
 	@Path("activity")
 	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 	@Consumes({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-	public Activity postActivity(Activity a) throws JsonParseException, JsonMappingException, IOException {
+	public Activity postActivity(String a) throws JsonParseException, JsonMappingException, IOException {
 		System.out.println("POST /activity");
 		
 		Response resp;

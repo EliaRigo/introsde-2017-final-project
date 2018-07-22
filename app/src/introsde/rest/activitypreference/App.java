@@ -74,9 +74,10 @@ public class App {
 		System.out.println("2. Get available domain");
 		System.out.println("3. Get all items by id domain");
 		System.out.println("4. Get all items");
-		System.out.println("5. Delete my activity");
-		System.out.println("6. Update my activity");
-		System.out.println("7. Get suggestions");
+		System.out.println("5. Add new activity");
+		System.out.println("6. Delete my activity");
+		System.out.println("7. Update my activity");
+		System.out.println("8. Get suggestions");
 		if (p.getIsAdmin() == 1) {
 			System.out.println();
 			System.out.println("Congratulations! You are an admin!");
@@ -108,17 +109,25 @@ public class App {
 			break;
 		case 4:
 			getAllItems();
+			operations();
 			break;
 		case 5:
-			deleteMyActivity();
+			addNewActivity();
 			operations();
 			break;
 		case 6:
-			updateMyActivity();
+			deleteMyActivity();
 			operations();
 			break;
 		case 7:
+			updateMyActivity();
+			operations();
+			break;
+		case 8:
 			//getSuggestions();
+			break;
+		case 10:
+			addNewItem();
 			break;
 		case 0:
 			exit();
@@ -337,7 +346,6 @@ public class App {
 			System.out.println(String.format("Item hour end: %s", d.getHourEnd()));
 			System.out.println();
 		}
-		operations();
 	}
 	
 	public static void getAllItemsByIdDomain() throws IOException {
@@ -379,6 +387,37 @@ public class App {
 		operations();
 	}
 	
+	public static void addNewActivity() throws IOException {
+		System.out.println();
+		System.out.println("ADD MY ACTIVITY");
+		getAllItems();
+		System.out.print("Id Item: ");
+		int idItem = sc.nextInt();
+		System.out.print("Date: ");
+		String date = sc.next();
+		System.out.print("Evaluation: ");
+		int evaluation = sc.nextInt();
+		
+		Response resp;
+		ObjectMapper mapper = new ObjectMapper();
+		ClientConfig clientConfig = new ClientConfig();
+		Client client = ClientBuilder.newClient(clientConfig);
+		WebTarget service = client.target(getBaseURI());
+		
+		String request = String.format("/general/activity/");
+		String type = MediaType.APPLICATION_JSON;
+		String content = MediaType.APPLICATION_JSON;
+		String body = "{" + 
+				"\"idPerson\":" + p.getIdPerson() + ", " + 
+				"\"idItem\":" + idItem + ", " + 
+				"\"date\": \"" + date + "\", " +  
+				"\"evaluation\":" + evaluation +
+				"}";
+		
+		resp = service.path(request).request().accept(type).post(Entity.entity(body, content));
+		System.out.print("Activity succesfully added!");
+	}
+	
 	public static void deleteMyActivity() throws IOException {
 		System.out.println();
 		System.out.println("DELETE MY ACTIVITY");
@@ -406,7 +445,6 @@ public class App {
 		ArrayList<Activity> activity = getMyActivity();
 		System.out.println("Id activity to update: ");
 		int id = sc.nextInt();
-		System.out.println();
 		System.out.println("Update date: ");
 		String date = sc.next();
 		System.out.println("Update evaluation: ");
@@ -447,4 +485,11 @@ public class App {
 			System.out.println("Activity id not valid");
 		}
 	}
+
+	/* Admin */
+	
+	public static void addNewItem() {
+		
+	}
+	
 }
