@@ -52,7 +52,7 @@ public class PersonResource {
 	@GET
 	@Path("/init")
 	public String init() throws ParseException, IOException {
-		//App.init();
+		App.init();
 		return "OK";
 	}
 

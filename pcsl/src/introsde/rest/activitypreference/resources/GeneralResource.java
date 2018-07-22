@@ -229,6 +229,7 @@ public class GeneralResource {
 		return g.getMySuggestion(id);
 	}
 	
+	@GET
 	@Path("person/{id}/calculate-suggestion")
 	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 	public Suggestion getCalculateSuggestion(@PathParam("id") int id) throws IOException_Exception, JsonMappingException_Exception, JsonParseException_Exception {

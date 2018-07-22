@@ -182,8 +182,8 @@ public class GeneralImpl implements General {
 		for (Activity myA : myActivity) {
 			for (Item i : item) {
 				if (i.getIdItem() == myA.getIdItem()) {
-					int number = domainVote.get(i.getIdDomain()) == null ? 0 : domainVote.get(i.getIdDomain());
-					domainVote.putIfAbsent(i.getIdDomain(), number++);
+					int number = domainVote.get(i.getIdDomain()) == null ? 1 : domainVote.get(i.getIdDomain()) + 1;
+					domainVote.put(i.getIdDomain(), number);
 				}
 			}
 		}
@@ -202,8 +202,7 @@ public class GeneralImpl implements General {
 		for (Activity a : activity) {
 			for (Item i : item) {
 				if (i.getIdItem() == a.getIdItem() &&
-					i.getIdDomain() == maxEntry.getKey() &&
-					i.getDate().compareTo(dtf.format(now)) > 0)
+					i.getIdDomain() == maxEntry.getKey())
 				{
 					activityPrefDomain.add(a);
 				}
@@ -212,8 +211,8 @@ public class GeneralImpl implements General {
 		
 		// Get activity with max evaluation from all users
 		for (Activity a : activityPrefDomain) {
-			int number = activityVote.get(a.getIdItem()) == null ? 0 : activityVote.get(a.getIdActivity());
-			activityVote.putIfAbsent(a.getIdItem(), number += a.getEvaluation());
+			int number = activityVote.get(a.getIdItem()) == null ? a.getEvaluation() : activityVote.get(a.getIdItem()) + a.getEvaluation();
+			activityVote.put(a.getIdItem(), number);
 		}
 		
 		// Return item with max evaluation
