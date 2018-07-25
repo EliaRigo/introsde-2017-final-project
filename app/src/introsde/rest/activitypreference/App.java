@@ -82,8 +82,8 @@ public class App {
 			System.out.println();
 			System.out.println("Congratulations! You are an admin!");
 			System.out.println("You can choose also this additional options");
-			System.out.println("10. Add new item");
-			System.out.println("11. Add new domain");
+			System.out.println("10. Add new domain");
+			System.out.println("11. Add new item");
 			System.out.println("12. Update item");
 			System.out.println("13. Update domain");
 			System.out.println("14. Delete item");
@@ -124,11 +124,16 @@ public class App {
 			operations();
 			break;
 		case 8:
-			//getSuggestions();
+			getSuggestion();
+			operations();
 			break;
 		case 10:
-			addNewItem();
+			addNewDomain();
+			operations();
 			break;
+		case 11:
+			addNewItem();
+			operations();
 		case 0:
 			exit();
 			break;
@@ -179,7 +184,7 @@ public class App {
 		String username = sc.next();
 		p.setUsername(username);
 
-		System.out.print("username: ");
+		System.out.print("password: ");
 		String password = sc.next();
 		p.setPassword(password);
 
@@ -485,11 +490,82 @@ public class App {
 			System.out.println("Activity id not valid");
 		}
 	}
+	
+	public static void getSuggestion() {
+		
+	}
 
 	/* Admin */
 	
-	public static void addNewItem() {
+	public static void addNewDomain() {
+		System.out.println();
+		System.out.println("ADD NEW DOMAIN");
+		System.out.print("Domain name: ");
+		Domain d = new Domain();
+		String name = sc.next();
+		d.setName(name);
 		
+		Response resp;
+		ObjectMapper mapper = new ObjectMapper();
+		ClientConfig clientConfig = new ClientConfig();
+		Client client = ClientBuilder.newClient(clientConfig);
+		WebTarget service = client.target(getBaseURI());
+		
+		String request = String.format("/general/domain/");
+		String type = MediaType.APPLICATION_JSON;
+		String content = MediaType.APPLICATION_JSON;
+		
+		resp = service.path(request).request().accept(type).post(Entity.entity(d, content));
+		if (resp != null) {
+			System.out.print("Domain succesfully added!");
+		}
+		else {
+			System.out.print("Whoops, somenthing went wrong");
+		}
+	}
+	
+	public static void addNewItem() throws IOException {
+		System.out.println();
+		System.out.println("ADD NEW ITEM");
+		getAvailableDomain();
+		Item i = new Item();
+		System.out.println();
+		System.out.print("Name: ");
+		String name = sc.next();
+		i.setName(name);
+		System.out.print("Description: ");
+		String description = sc.next(); 
+		i.setDescription(description);
+		System.out.print("Id Domain: ");
+		int idDomain = sc.nextInt();
+		i.setIdDomain(idDomain);
+		System.out.print("Date: ");
+		String date = sc.next();
+		i.setDate(date);
+		System.out.print("Hour Start: ");
+		String hourStart = sc.next();
+		i.setHourStart(hourStart);
+		System.out.print("Hour End: ");
+		String hourEnd = sc.next();
+		i.setHourEnd(hourEnd);
+		
+		Response resp;
+		ObjectMapper mapper = new ObjectMapper();
+		ClientConfig clientConfig = new ClientConfig();
+		Client client = ClientBuilder.newClient(clientConfig);
+		WebTarget service = client.target(getBaseURI());
+		
+		String request = String.format("/general/item/");
+		String type = MediaType.APPLICATION_JSON;
+		String content = MediaType.APPLICATION_JSON;
+		
+		resp = service.path(request).request().accept(type).post(Entity.entity(i, content));
+		if (resp != null) {
+			System.out.println("Item succesfully added!");
+		}
+		else {
+			System.out.println("Whoops, somenthing went wrong");
+		}
 	}
 	
 }
