@@ -25,7 +25,7 @@ import introsde.rest.activitypreference.model.Person;
 
 public class App {
 
-	static Person p = new Person();
+	static Person p;
 	static Scanner sc = new Scanner(System.in);
 
 	public static void main(String[] args) throws IOException {
@@ -84,10 +84,10 @@ public class App {
 			System.out.println("You can choose also this additional options");
 			System.out.println("10. Add new domain");
 			System.out.println("11. Add new item");
-			System.out.println("12. Update item");
-			System.out.println("13. Update domain");
-			System.out.println("14. Delete item");
-			System.out.println("15. Delete domain");
+			System.out.println("12. Update domain");
+			System.out.println("13. Update item");
+			System.out.println("14. Delete domain");
+			System.out.println("15. Delete item");
 			System.out.println();
 		}
 		System.out.println("0. Exit");
@@ -134,6 +134,18 @@ public class App {
 		case 11:
 			addNewItem();
 			operations();
+		case 12:
+			updateDomain();
+			operations();
+		case 13:
+			updateItem();
+			operations();
+		case 14:
+			deleteDomain();
+			operations();
+		case 15:
+			deleteItem();
+			operations();
 		case 0:
 			exit();
 			break;
@@ -177,6 +189,7 @@ public class App {
 	}
 	
 	public static void login() throws IOException {
+		p = new Person();
 		System.out.println();
 		System.out.println("LOGIN ");
 		System.out.println();
@@ -568,4 +581,125 @@ public class App {
 		}
 	}
 	
+	public static void updateDomain() throws IOException {
+		System.out.println();
+		System.out.println("UPDATE DOMAIN");
+		getAvailableDomain();
+		Domain d = new Domain();
+		System.out.print("Domain id:");
+		int id = sc.nextInt();
+		d.setIdDomain(id);
+		System.out.print("Domain name: ");
+		String name = sc.next();
+		d.setName(name);
+		
+		Response resp;
+		ObjectMapper mapper = new ObjectMapper();
+		ClientConfig clientConfig = new ClientConfig();
+		Client client = ClientBuilder.newClient(clientConfig);
+		WebTarget service = client.target(getBaseURI());
+		
+		String request = String.format("/general/domain/" + id);
+		String type = MediaType.APPLICATION_JSON;
+		String content = MediaType.APPLICATION_JSON;
+		
+		resp = service.path(request).request().accept(type).put(Entity.entity(d, content));
+		if (resp != null) {
+			System.out.println("Domain succesfully updated!");
+		}
+		else {
+			System.out.println("Whoops, somenthing went wrong");
+		}
+	}
+	
+	public static void updateItem() throws IOException {
+		System.out.println();
+		System.out.println("UPDATE NEW ITEM");
+		getAvailableDomain();
+		Item i = new Item();
+		System.out.println();
+		System.out.print("Id Item: ");
+		int id = sc.nextInt();
+		i.setIdItem(id);
+		System.out.print("Name: ");
+		String name = sc.next();
+		i.setName(name);
+		System.out.print("Description: ");
+		String description = sc.next(); 
+		i.setDescription(description);
+		System.out.print("Id Domain: ");
+		int idDomain = sc.nextInt();
+		i.setIdDomain(idDomain);
+		System.out.print("Date: ");
+		String date = sc.next();
+		i.setDate(date);
+		System.out.print("Hour Start: ");
+		String hourStart = sc.next();
+		i.setHourStart(hourStart);
+		System.out.print("Hour End: ");
+		String hourEnd = sc.next();
+		i.setHourEnd(hourEnd);
+		
+		Response resp;
+		ObjectMapper mapper = new ObjectMapper();
+		ClientConfig clientConfig = new ClientConfig();
+		Client client = ClientBuilder.newClient(clientConfig);
+		WebTarget service = client.target(getBaseURI());
+		
+		String request = String.format("/general/item/" + id);
+		String type = MediaType.APPLICATION_JSON;
+		String content = MediaType.APPLICATION_JSON;
+		
+		resp = service.path(request).request().accept(type).put(Entity.entity(i, content));
+		if (resp != null) {
+			System.out.println("Item succesfully updated!");
+		}
+		else {
+			System.out.println("Whoops, somenthing went wrong");
+		}
+	}
+	
+	public static void deleteDomain() throws IOException {
+		System.out.println();
+		System.out.println("DELETE DOMAIN");
+		getAvailableDomain();
+		System.out.println("Select id domain to delete: ");
+		int s = sc.nextInt();
+		System.out.println();
+		
+		Response resp;
+		ObjectMapper mapper = new ObjectMapper();
+		ClientConfig clientConfig = new ClientConfig();
+		Client client = ClientBuilder.newClient(clientConfig);
+		WebTarget service = client.target(getBaseURI());
+		
+		String request = String.format("/general/domain/%d", s);
+		String type = MediaType.APPLICATION_JSON;
+		String content = MediaType.APPLICATION_JSON;
+		
+		resp = service.path(request).request().accept(type).delete();
+		System.out.println("Domain succesfully deleted!");
+	}
+	
+	public static void deleteItem() throws IOException {
+		System.out.println();
+		System.out.println("DELETE ITEM");
+		getAllItems();
+		System.out.println("Select id item to delete: ");
+		int s = sc.nextInt();
+		System.out.println();
+		
+		Response resp;
+		ObjectMapper mapper = new ObjectMapper();
+		ClientConfig clientConfig = new ClientConfig();
+		Client client = ClientBuilder.newClient(clientConfig);
+		WebTarget service = client.target(getBaseURI());
+		
+		String request = String.format("/general/item/%d", s);
+		String type = MediaType.APPLICATION_JSON;
+		String content = MediaType.APPLICATION_JSON;
+		
+		resp = service.path(request).request().accept(type).delete();
+		System.out.println("Item succesfully deleted!");
+	}
 }
