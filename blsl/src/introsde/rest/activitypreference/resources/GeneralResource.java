@@ -87,6 +87,26 @@ public class GeneralResource {
 	 */
 	
 	@GET
+	@Path("init")
+	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+	public String getInit() throws IOException {
+		System.out.println("GET /init");
+		
+		Response resp;
+		ObjectMapper mapper = new ObjectMapper();
+		ClientConfig clientConfig = new ClientConfig();
+		Client client = ClientBuilder.newClient(clientConfig);
+		WebTarget service = client.target(getBaseURI());
+		
+		String request = "/person/init";
+		String type = MediaType.APPLICATION_JSON;
+
+		resp = service.path(request).request().accept(type).get();
+
+		return resp.readEntity(String.class);
+	}
+	
+	@GET
 	@Path("domain")
 	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 	public List<Domain> getListDomain() throws IOException {

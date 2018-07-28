@@ -78,9 +78,13 @@ public class App {
 		int i = sc.nextInt();
 		switch (i) {
 		case 1:
-			login();
+			getInit();
+			init();
 			break;
 		case 2:
+			login();
+			break;
+		case 3:
 			registration();
 			break;
 		case 0:
@@ -205,8 +209,9 @@ public class App {
 		System.out.println();
 		System.out.println("Select your choose: ");
 		System.out.println();
-		System.out.println("1. Login");
-		System.out.println("2. Registration");
+		System.out.println("1. Init/Reset system");
+		System.out.println("2. Login");
+		System.out.println("3. Registration");
 		System.out.println("0. Exit");
 		System.out.println();
 		System.out.print("> ");
@@ -226,6 +231,21 @@ public class App {
 		System.out.println(String.format("username: %s", p.getUsername()));
 		System.out.println();
 		operations();
+	}
+	
+	public static void getInit() {
+		Response resp;
+		ObjectMapper mapper = new ObjectMapper();
+		ClientConfig clientConfig = new ClientConfig();
+		Client client = ClientBuilder.newClient(clientConfig);
+		WebTarget service = client.target(getBaseURI());
+		
+		String request = "/general/init";
+		String type = MediaType.APPLICATION_JSON;
+
+		resp = service.path(request).request().accept(type).get();
+
+		System.out.println("Init status: " + resp.readEntity(String.class));
 	}
 	
 	public static void login() throws IOException {
