@@ -29,6 +29,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Request;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
+import javax.xml.ws.Holder;
 
 import org.glassfish.jersey.client.ClientConfig;
 
@@ -326,6 +327,17 @@ public class GeneralResource {
 
 		resp = service.path(request).request().accept(type).post(Entity.entity(d, content));
 		return resp.readEntity(Domain.class);
+	}
+	
+	@POST
+	@Path("suggestion")
+	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+	public Suggestion postSuggestion(Suggestion suggestion) throws IOException_Exception, JsonMappingException_Exception, JsonParseException_Exception {
+		PeopleService s = new PeopleService();
+		General g = s.getGeneralImplPort();
+		Holder<Suggestion> holder = new Holder<Suggestion>(suggestion);
+		g.postSuggestion(holder);
+		return suggestion;
 	}
 	
 	@POST

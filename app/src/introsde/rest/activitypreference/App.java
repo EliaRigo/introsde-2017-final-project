@@ -22,6 +22,7 @@ import introsde.rest.activitypreference.model.Activity;
 import introsde.rest.activitypreference.model.Domain;
 import introsde.rest.activitypreference.model.Item;
 import introsde.rest.activitypreference.model.Person;
+import introsde.rest.activitypreference.model.Suggestion;
 
 public class App {
 
@@ -42,6 +43,31 @@ public class App {
 		// UriBuilder.fromUri("https://introsde2017-assign-2-server.herokuapp.com/assignment/").build();
 	}
 
+	private static ArrayList<Item> getListItem() throws IOException {
+		Response resp;
+		ObjectMapper mapper = new ObjectMapper();
+		ClientConfig clientConfig = new ClientConfig();
+		Client client = ClientBuilder.newClient(clientConfig);
+		WebTarget service = client.target(getBaseURI());
+		
+		String request = "/general/item";
+		String type = MediaType.APPLICATION_JSON;
+
+		resp = service.path(request).request().accept(type).get();
+
+		String json = resp.readEntity(String.class);
+		JsonNode nodes = mapper.readTree(json);
+		
+		ArrayList<Item> arrayItem = new ArrayList<>();
+		
+		for (int i=0; i < nodes.size(); i++) {
+			Item a = mapper.readValue(nodes.get(i).toString(), Item.class);
+			arrayItem.add(a);
+		}
+		return arrayItem;
+		//return mapper.readValue(json, arrayItem.getClass());
+	}
+	
 	/**
 	 * Print utility
 	 * @throws IOException 
@@ -77,7 +103,8 @@ public class App {
 		System.out.println("5. Add new activity");
 		System.out.println("6. Delete my activity");
 		System.out.println("7. Update my activity");
-		System.out.println("8. Get suggestions");
+		System.out.println("8. Calculate suggestions");
+		System.out.println("9. Get suggestions list");
 		if (p.getIsAdmin() == 1) {
 			System.out.println();
 			System.out.println("Congratulations! You are an admin!");
@@ -95,6 +122,10 @@ public class App {
 		System.out.print("> ");
 		
 		int i = sc.nextInt();
+		if (i > 9 && p.getIsAdmin() == 0) {
+			i = -1;
+		}
+		
 		switch (i) {
 		case 1:
 			getMyActivity();
@@ -124,6 +155,10 @@ public class App {
 			operations();
 			break;
 		case 8:
+			calculateSuggestion();
+			operations();
+			break;
+		case 9:
 			getSuggestion();
 			operations();
 			break;
@@ -134,18 +169,23 @@ public class App {
 		case 11:
 			addNewItem();
 			operations();
+			break;
 		case 12:
 			updateDomain();
 			operations();
+			break;
 		case 13:
 			updateItem();
 			operations();
+			break;
 		case 14:
 			deleteDomain();
 			operations();
+			break;
 		case 15:
 			deleteItem();
 			operations();
+			break;
 		case 0:
 			exit();
 			break;
@@ -332,7 +372,7 @@ public class App {
 		}
 	}
 	
-	public static void getAllItems() throws IOException {
+	public static ArrayList<Item> getAllItems() throws IOException {
 		System.out.println();
 		System.out.println("ITEMS");
 		System.out.println();
@@ -351,8 +391,11 @@ public class App {
 		String json = resp.readEntity(String.class);
 		JsonNode nodes = mapper.readTree(json);
 		
+		ArrayList<Item> arrayItem = new ArrayList<Item>();
+		
 		for (int i=0; i < nodes.size(); i++) {
 			Item d = mapper.readValue(nodes.get(i).toString(), Item.class);
+			arrayItem.add(d);
 			
 			System.out.println("--- Item Information ---");
 			System.out.println(String.format("Item id: %d", d.getIdItem()));
@@ -364,6 +407,7 @@ public class App {
 			System.out.println(String.format("Item hour end: %s", d.getHourEnd()));
 			System.out.println();
 		}
+		return arrayItem;
 	}
 	
 	public static void getAllItemsByIdDomain() throws IOException {
@@ -504,8 +548,97 @@ public class App {
 		}
 	}
 	
-	public static void getSuggestion() {
+	public static void calculateSuggestion() throws IOException {
+		ArrayList<Item> arrayItem = getListItem();
 		
+		Response resp, itemResp;
+		ObjectMapper mapper = new ObjectMapper();
+		ClientConfig clientConfig = new ClientConfig();
+		Client client = ClientBuilder.newClient(clientConfig);
+		WebTarget service = client.target(getBaseURI());
+		
+		String request = String.format("/general/person/" + p.getIdPerson() + "/calculate-suggestion");
+		String type = MediaType.APPLICATION_JSON;
+
+		resp = service.path(request).request().accept(type).get();
+
+		Suggestion s = resp.readEntity(Suggestion.class);
+		for (Item d : arrayItem) {
+			if (s.getIdItem() == d.getIdItem()) {
+				System.out.println("SUGGESTION");
+				System.out.println(String.format("Item id: %d", d.getIdItem()));
+				System.out.println(String.format("Item domain id: %d", d.getIdDomain()));
+				System.out.println(String.format("Item name: %s", d.getName()));
+				System.out.println(String.format("Item description: %s", d.getDescription()));
+				System.out.println(String.format("Item date: %s", d.getDate()));
+				System.out.println(String.format("Item hour start: %s", d.getHourStart()));
+				System.out.println(String.format("Item hour end: %s", d.getHourEnd()));
+				System.out.println();
+				System.out.print("How do you evaluate this suggestion ? ");
+				int evaluation = sc.nextInt();
+				s.setEvaluation(evaluation);
+				suggestionEvaluation(s);
+				return;
+			}
+		}
+	}
+	
+	public static void suggestionEvaluation(Suggestion s) {
+		Response resp;
+		ObjectMapper mapper = new ObjectMapper();
+		ClientConfig clientConfig = new ClientConfig();
+		Client client = ClientBuilder.newClient(clientConfig);
+		WebTarget service = client.target(getBaseURI());
+		
+		String request = String.format("/general/suggestion/");
+		String type = MediaType.APPLICATION_JSON;
+		String content = MediaType.APPLICATION_JSON;
+		
+		resp = service.path(request).request().accept(type).post(Entity.entity(s, content));
+		if (resp != null) {
+			System.out.println("Suggestion succesfully evaluated!");
+		}
+		else {
+			System.out.println("Whoops, somenthing went wrong");
+		}
+	}
+	
+	public static void getSuggestion() throws IOException {
+		ArrayList<Item> arrayItem = getListItem();
+		
+		Response resp, itemResp;
+		ObjectMapper mapper = new ObjectMapper();
+		ClientConfig clientConfig = new ClientConfig();
+		Client client = ClientBuilder.newClient(clientConfig);
+		WebTarget service = client.target(getBaseURI());
+		
+		String request = String.format("/general/person/" + p.getIdPerson() + "/suggestion");
+		String type = MediaType.APPLICATION_JSON;
+
+		resp = service.path(request).request().accept(type).get();
+		
+		String json = resp.readEntity(String.class);
+		JsonNode nodes = mapper.readTree(json);
+
+		for (int i=0; i < nodes.size(); i++) {
+			Suggestion s = mapper.readValue(nodes.get(i).toString(), Suggestion.class);
+			for (Item d : arrayItem) {
+				if (s.getIdItem() == d.getIdItem()) {
+					System.out.println("--- Suggestion Item ---");
+					System.out.println(String.format("Suggestion id: %d", s.getIdSuggestion()));
+					System.out.println(String.format("Suggestion date added: %s", s.getDateAdded()));
+					System.out.println(String.format("Suggestion personal evaluation: %d", s.getEvaluation()));
+					System.out.println(String.format("Item id: %d", d.getIdItem()));
+					System.out.println(String.format("Item domain id: %d", d.getIdDomain()));
+					System.out.println(String.format("Item name: %s", d.getName()));
+					System.out.println(String.format("Item description: %s", d.getDescription()));
+					System.out.println(String.format("Item date: %s", d.getDate()));
+					System.out.println(String.format("Item hour start: %s", d.getHourStart()));
+					System.out.println(String.format("Item hour end: %s", d.getHourEnd()));
+					System.out.println();
+				}
+			}
+		}
 	}
 
 	/* Admin */
