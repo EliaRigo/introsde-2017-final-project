@@ -246,6 +246,12 @@ public class App {
 		resp = service.path(request).request().accept(type).get();
 
 		System.out.println("Init status: " + resp.readEntity(String.class));
+		System.out.println("Available users: ");
+		System.out.println("username - password");
+		System.out.println("paper - password123");
+		System.out.println("pina - password123");
+		System.out.println("pluto - password123");
+		System.out.println();
 	}
 	
 	public static void login() throws IOException {
@@ -290,20 +296,28 @@ public class App {
 		System.out.println();
 		System.out.println(String.format("Input in the following form your personal information"));
 		System.out.println();
+		p = new Person();
 		System.out.print(String.format("Firstname: "));
-		p.setFirstname(sc.next());
+		String firstname = sc.next();
+		p.setFirstname(firstname);
 		System.out.print(String.format("Lastname: "));
-		p.setLastname(sc.next());
+		String lastname = sc.next();
+		p.setLastname(lastname);
 		System.out.print(String.format("Birthdate: "));
-		p.setBirthdate(sc.next());
+		String birhdate = sc.next();
+		p.setBirthdate(birhdate);
 		System.out.print(String.format("Work Hour Start: "));
-		p.setWorkHourStart(sc.next());
+		String workHourStart = sc.next();
+		p.setWorkHourStart(workHourStart);
 		System.out.print(String.format("Work Hour End: "));
-		p.setWorkHourEnd(sc.next());
+		String workHourEnd = sc.next();
+		p.setWorkHourEnd(workHourEnd);
 		System.out.print(String.format("username: "));
-		p.setUsername(sc.next());
+		String username = sc.next();
+		p.setUsername(username);
 		System.out.print(String.format("password: "));
-		p.setPassword(sc.next());
+		String password = sc.next();
+		p.setPassword(password);
 		p.setIsAdmin(0);
 		
 		Response resp;
@@ -696,22 +710,22 @@ public class App {
 		getAvailableDomain();
 		Item i = new Item();
 		System.out.println();
-		System.out.print("Name: ");
+		System.out.println("Name: ");
 		String name = sc.next();
 		i.setName(name);
-		System.out.print("Description: ");
+		System.out.println("Description: ");
 		String description = sc.next(); 
 		i.setDescription(description);
-		System.out.print("Id Domain: ");
+		System.out.println("Id Domain: ");
 		int idDomain = sc.nextInt();
 		i.setIdDomain(idDomain);
-		System.out.print("Date: ");
+		System.out.println("Date: ");
 		String date = sc.next();
 		i.setDate(date);
-		System.out.print("Hour Start: ");
+		System.out.println("Hour Start: ");
 		String hourStart = sc.next();
 		i.setHourStart(hourStart);
-		System.out.print("Hour End: ");
+		System.out.println("Hour End: ");
 		String hourEnd = sc.next();
 		i.setHourEnd(hourEnd);
 		
@@ -767,8 +781,8 @@ public class App {
 	
 	public static void updateItem() throws IOException {
 		System.out.println();
-		System.out.println("UPDATE NEW ITEM");
-		getAvailableDomain();
+		System.out.println("UPDATE ITEM");
+		getAllItems();
 		Item i = new Item();
 		System.out.println();
 		System.out.print("Id Item: ");
